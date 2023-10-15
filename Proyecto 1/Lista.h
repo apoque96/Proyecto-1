@@ -59,7 +59,7 @@ public:
 	}
 
 	//Regresa la cantidad de nodos en la lista
-	int size() {
+	int Size() {
 		return size;
 	}
 
@@ -76,7 +76,7 @@ public:
 	//Elimina un nodo de la lista
 	Node^ remove(int index) {
 		//Si el indice está fuera de rango, no hace nada
-		if (index < 0 || index >= size) return;
+		if (index < 0 || index >= size) return nullptr;
 		Node^ node_to_delete;
 		//Elimina la cabeza
 		if (index == 0) {
