@@ -1,30 +1,49 @@
 #include "cancion.h"
+#include "Cd.h"
+
+enum tipo_de_lista {
+	lista_cd = 0,
+	lista_cancion = 1
+};
 
 ref class Lista {
 private:
+
 	ref struct Node {
 		//Variables del nodo
 		Node^ next;
 		Node^ prev;
-		cancion^ val;
-		
-		//Constructor del nodo
+		cancion^ val_cancion;
+		Cd^ val_cd;
+
+		//Constructor del nodo para las listas de canciones
 		Node(System::String^ nombre, System::String^ artista, System::String^ cd, int duracion_segundos):
-			next(nullptr), prev(nullptr)
+			next(nullptr), prev(nullptr), val_cd(nullptr)
 		{
-			val = gcnew cancion(nombre, artista, cd, duracion_segundos);
+			val_cancion = gcnew cancion(nombre, artista, cd, duracion_segundos);
+		}
+		//Constructor del nodo para las listas de cd
+		Node(System::String^ nombre) :
+			next(nullptr), prev(nullptr), val_cancion(nullptr)
+		{
+			val_cd = gcnew Cd(nombre);
 		}
 	};
 	//Variables de la lista
 	Node^ head;
 	Node^ tail;
 	int size;
+	const tipo_de_lista tipo;
 public:
 	//Constructor de la lista
-	Lista(): size(0){}
+	Lista(tipo_de_lista tipo): size(0), tipo(tipo){}
 
-	//Añade elementos al final de la lista
+	//Copy constructor
+	Lista(Lista^ l): size(l->size), tipo(l->tipo), head(l->head), tail(l->tail) {}
+
+	//Añade un nodo canción al final de la lista
 	void Add(System::String^ nombre, System::String^ artista, System::String^ cd, int duracion_segundos) {
+		if (tipo == lista_cd) return;
 		size++;
 		if (!head) {
 			//Se ejecuta en caso de que la lista está vacia
@@ -36,9 +55,24 @@ public:
 		tail->next->prev = tail;
 		tail = tail->next;
 	}
+	//Añade un nodo cd al final de la lista
+	void Add(System::String^ nombre) {
+		if (tipo == lista_cancion) return;
+		size++;
+		if (!head) {
+			//Se ejecuta en caso de que la lista está vacia
+			head = gcnew Node(nombre);
+			tail = head;
+			return;
+		}
+		tail->next = gcnew Node(nombre);
+		tail->next->prev = tail;
+		tail = tail->next;
+	}
 
-	//Añade un elemento en el indice indicado, sin importar que el indice no este en el rango
+	//Añade un nodo canción en el indice indicado, sin importar que el indice no este en el rango
 	void Add(System::String^ nombre, System::String^ artista, System::String^ cd, int duracion_segundos, int index) {
+		if (tipo == lista_cd) return;
 		size++;
 		if (!head) {
 			//Se ejecuta en caso de que la lista está vacia
@@ -53,6 +87,28 @@ public:
 		}
 		//Añade el nodo
 		current->next = gcnew Node(nombre, artista, cd, duracion_segundos);
+		current->next->prev = current;
+		//En caso de añadir al final de la lista, cambia la cola al nodo añadido
+		if (current == tail) tail = tail->next;
+	}
+
+	//Añade un nodo cd en el indice indicado, sin importar que el indice no este en el rango
+	void Add(System::String^ nombre, int index) {
+		if (tipo == lista_cancion) return;
+		size++;
+		if (!head) {
+			//Se ejecuta en caso de que la lista está vacia
+			head = gcnew Node(nombre);
+			tail = head;
+			return;
+		}
+		//Traversa la lista
+		Node^ current = head;
+		for (int i = 0; i < index && current->next; i++) {
+			current = current->next;
+		}
+		//Añade el nodo
+		current->next = gcnew Node(nombre);
 		current->next->prev = current;
 		//En caso de añadir al final de la lista, cambia la cola al nodo añadido
 		if (current == tail) tail = tail->next;
