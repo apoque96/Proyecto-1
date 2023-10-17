@@ -126,7 +126,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="cancion.h" />
-    <ClInclude Include="Cd.h" />
     <ClInclude Include="Leer_Cd.h" />
     <ClInclude Include="Lista.h" />
     <ClInclude Include="main.h">

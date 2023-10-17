@@ -52,13 +52,16 @@ namespace Proyecto1 {
 
 
 
+
+
+
 	protected:
 
 	private:
 		/// <summary>
 		/// Required designer variable.
 		/// </summary>
-		System::ComponentModel::Container ^components;
+		System::ComponentModel::Container^ components;
 
 #pragma region Windows Form Designer generated code
 		/// <summary>
@@ -156,20 +159,38 @@ namespace Proyecto1 {
 
 		}
 #pragma endregion
-	private: System::Void menu_Click(System::Object^ sender, System::EventArgs^ e) {
-		
-	}
-	private: System::Void retroceder_Click(System::Object^ sender, System::EventArgs^ e) {
-		
-	}
-	private: System::Void reproducir_Click(System::Object^ sender, System::EventArgs^ e) {
-		
-	}
-	private: System::Void adelantar_Click(System::Object^ sender, System::EventArgs^ e) {
-		
-	}
-	private: System::Void btn_cargar_Click(System::Object^ sender, System::EventArgs^ e) {
-		Leer_dirrección("C:\\Landivar\\Semestre 2\\Programacion avanzada\\Cd test");
-	}
-};
+
+		Lista^ listado_de_cds = nullptr;
+
+		private: System::Void menu_Click(System::Object^ sender, System::EventArgs^ e) {
+
+		}
+		private: System::Void retroceder_Click(System::Object^ sender, System::EventArgs^ e) {
+
+		}
+		private: System::Void reproducir_Click(System::Object^ sender, System::EventArgs^ e) {
+
+		}
+		private: System::Void adelantar_Click(System::Object^ sender, System::EventArgs^ e) {
+
+		}
+		private: System::Void btn_cargar_Click(System::Object^ sender, System::EventArgs^ e) {
+			System::Windows::Forms::FolderBrowserDialog^ folderBrowserDialog1 = gcnew System::Windows::Forms::FolderBrowserDialog;
+
+			// Set the initial directory (optional)
+			folderBrowserDialog1->SelectedPath = "C:\\";
+
+			// Show the dialog and get the result
+			System::Windows::Forms::DialogResult result = folderBrowserDialog1->ShowDialog();
+
+
+			if (listado_de_cds) {
+				listado_de_cds = nullptr;
+			}
+			if (result == System::Windows::Forms::DialogResult::OK) {
+				msclr::interop::marshal_context context;
+				listado_de_cds = Leer_dirrección(context.marshal_as<std::string>(folderBrowserDialog1->SelectedPath));
+			}
+		}
+	};
 }
