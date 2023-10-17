@@ -1,5 +1,5 @@
+#pragma once
 #include "cancion.h"
-#include "Cd.h"
 
 enum tipo_de_lista {
 	lista_cd = 0,
@@ -8,6 +8,14 @@ enum tipo_de_lista {
 
 ref class Lista {
 private:
+	//Está clase estaba antes en su propio header file, pero me estaba dando problemas así que mejor lo deje aquí :P
+	ref class Cd {
+	private:
+		System::String^ nombre;
+		Lista^ canciones;
+	public:
+		Cd(System::String^ nombre, Lista^ canciones) : nombre(nombre), canciones(canciones) {}
+	};
 
 	ref struct Node {
 		//Variables del nodo
@@ -17,18 +25,19 @@ private:
 		Cd^ val_cd;
 
 		//Constructor del nodo para las listas de canciones
-		Node(System::String^ nombre, System::String^ artista, System::String^ cd, int duracion_segundos):
+		Node(System::String^ nombre, System::String^ artista, System::String^ cd, int duracion_segundos) :
 			next(nullptr), prev(nullptr), val_cd(nullptr)
 		{
 			val_cancion = gcnew cancion(nombre, artista, cd, duracion_segundos);
 		}
 		//Constructor del nodo para las listas de cd
-		Node(System::String^ nombre) :
+		Node(System::String^ nombre, Lista^ canciones) :
 			next(nullptr), prev(nullptr), val_cancion(nullptr)
 		{
-			val_cd = gcnew Cd(nombre);
+			val_cd = gcnew Cd(nombre, canciones);
 		}
 	};
+
 	//Variables de la lista
 	Node^ head;
 	Node^ tail;
@@ -56,16 +65,16 @@ public:
 		tail = tail->next;
 	}
 	//Añade un nodo cd al final de la lista
-	void Add(System::String^ nombre) {
+	void Add(System::String^ nombre, Lista^ canciones) {
 		if (tipo == lista_cancion) return;
 		size++;
 		if (!head) {
 			//Se ejecuta en caso de que la lista está vacia
-			head = gcnew Node(nombre);
+			head = gcnew Node(nombre, canciones);
 			tail = head;
 			return;
 		}
-		tail->next = gcnew Node(nombre);
+		tail->next = gcnew Node(nombre, canciones);
 		tail->next->prev = tail;
 		tail = tail->next;
 	}
@@ -93,12 +102,12 @@ public:
 	}
 
 	//Añade un nodo cd en el indice indicado, sin importar que el indice no este en el rango
-	void Add(System::String^ nombre, int index) {
+	void Add(System::String^ nombre, Lista^ canciones, int index) {
 		if (tipo == lista_cancion) return;
 		size++;
 		if (!head) {
 			//Se ejecuta en caso de que la lista está vacia
-			head = gcnew Node(nombre);
+			head = gcnew Node(nombre, canciones);
 			tail = head;
 			return;
 		}
@@ -108,7 +117,7 @@ public:
 			current = current->next;
 		}
 		//Añade el nodo
-		current->next = gcnew Node(nombre);
+		current->next = gcnew Node(nombre, canciones);
 		current->next->prev = current;
 		//En caso de añadir al final de la lista, cambia la cola al nodo añadido
 		if (current == tail) tail = tail->next;
@@ -130,9 +139,9 @@ public:
 	}
 
 	//Elimina un nodo de la lista
-	Node^ remove(int index) {
+	void remove(int index) {
 		//Si el indice está fuera de rango, no hace nada
-		if (index < 0 || index >= size) return nullptr;
+		if (index < 0 || index >= size) return;
 		Node^ node_to_delete;
 		//Elimina la cabeza
 		if (index == 0) {
@@ -141,7 +150,8 @@ public:
 			head->prev = nullptr;
 			if (!head) tail = nullptr;
 			size--;
-			return node_to_delete;
+			delete node_to_delete;
+			return;
 		}
 		//Elimina la cola
 		if (index == size - 1) {
@@ -149,7 +159,8 @@ public:
 			tail = tail->prev;
 			tail->next = nullptr;
 			size--;
-			return node_to_delete;
+			delete node_to_delete;
+			return;
 		}
 		size--;
 		//Traversas la lista hasta un nodo anterior al nodo a eliminar
@@ -160,17 +171,11 @@ public:
 		node_to_delete = current->next;
 		current->next = node_to_delete->next;
 		node_to_delete->next->prev = current;
-		//Quita los punteros en el nodo eliminado
-		//El garbage collector de cli se hara cargo de limpiar la memoria 
-		node_to_delete->prev = nullptr;
-		node_to_delete->next = nullptr;
-		//Retorna el nodo eliminado por si se desea acceder al valor o agregarlo a otra lista
-		return node_to_delete;
+		//Elimina el nodo indicado
+		delete node_to_delete;
 	}
 
 	bool isEmpty() {
 		return size == 0;
 	}
 };
-
-#pragma once
