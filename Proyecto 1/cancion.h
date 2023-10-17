@@ -25,6 +25,11 @@ public:
 		return context.marshal_as<std::string>(artista);
 	}
 
+	std::string obtener_cd() {
+		msclr::interop::marshal_context context;
+		return context.marshal_as<std::string>(cd);
+	}
+
 	int obtener_duracion_segundos() {
 		return duracion_segundos;
 	}
