@@ -1,9 +1,10 @@
+#include "Lista.h"
 
-ref class Cd {
+class Cd {
 private:
-	System::String^ nombre;
+	std::string nombre;
 	int cantidad_canciones;
 
 public:
-	Cd(System::String^ nombre): nombre(nombre){}
+	Cd(std::string nombre): nombre(nombre){}
 };

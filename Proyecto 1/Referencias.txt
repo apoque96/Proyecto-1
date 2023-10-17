@@ -1,2 +1,0 @@
-https://stackoverflow.com/questions/612097/how-can-i-get-the-list-of-files-in-a-directory-using-c-or-c/37494654#37494654
-https://www.techiedelight.com/extract-n-characters-from-the-end-of-a-string-in-cpp/
