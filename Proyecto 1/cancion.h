@@ -7,6 +7,7 @@ ref class cancion {
 private:
 	System::String^ nombre;
 	System::String^ artista;
+	System::String^ cd;
 	int duracion_segundos;
 public:
 	//Constructor de la clase
