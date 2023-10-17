@@ -1,3 +1,4 @@
+#pragma once
 #include <iostream>
 #include <string>
 #include <msclr\marshal_cppstd.h>
@@ -8,9 +9,9 @@ private:
 	System::String^ artista;
 	int duracion_segundos;
 public:
-	//Construcator de la clase
-	cancion(System::String^ nombre, System::String^ artista, int duracion_segundos): 
-		nombre(nombre), artista(artista), duracion_segundos(duracion_segundos){}
+	//Constructor de la clase
+	cancion(System::String^ nombre, System::String^ artista, System::String^ cd, int duración_segundos): 
+		nombre(nombre), artista(artista), cd(cd), duracion_segundos(duracion_segundos) {}
 #pragma region Funciones que retornan valores privados
 
 	std::string obtener_nombre() {

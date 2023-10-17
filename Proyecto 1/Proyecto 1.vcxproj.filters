@@ -23,9 +23,6 @@
     <ClInclude Include="main.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Cd.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="cancion.h">
       <Filter>Header Files</Filter>
     </ClInclude>
