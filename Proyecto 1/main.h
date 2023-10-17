@@ -174,6 +174,7 @@ namespace Proyecto1 {
 		private: System::Void adelantar_Click(System::Object^ sender, System::EventArgs^ e) {
 
 		}
+		//Carga el folder indicado
 		private: System::Void btn_cargar_Click(System::Object^ sender, System::EventArgs^ e) {
 			System::Windows::Forms::FolderBrowserDialog^ folderBrowserDialog1 = gcnew System::Windows::Forms::FolderBrowserDialog;
 
