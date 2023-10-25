@@ -7,7 +7,7 @@ enum tipo_de_lista {
 };
 
 ref class Lista {
-private:
+public:
 	//Está clase estaba antes en su propio header file, pero me estaba dando problemas así que mejor lo deje aquí :P
 	ref class Cd {
 	private:
@@ -15,6 +15,13 @@ private:
 		Lista^ canciones;
 	public:
 		Cd(System::String^ nombre, Lista^ canciones) : nombre(nombre), canciones(canciones) {}
+		System::String^ get_nombre() {
+			return nombre;
+		}
+
+		Lista^ get_canciones() {
+			return canciones;
+		}
 	};
 
 	ref struct Node {
@@ -43,7 +50,7 @@ private:
 	Node^ tail;
 	int size;
 	const tipo_de_lista tipo;
-public:
+
 	//Constructor de la lista
 	Lista(tipo_de_lista tipo): size(0), tipo(tipo){}
 
@@ -87,6 +94,14 @@ public:
 			//Se ejecuta en caso de que la lista está vacia
 			head = gcnew Node(nombre, artista, cd, duracion_segundos);
 			tail = head;
+			return;
+		}
+		//Agrega el nodo al inicio de la lista
+		if (index == 0) {
+			Node^ node_to_insert = gcnew Node(nombre, artista, cd, duracion_segundos);
+			head->prev = node_to_insert;
+			node_to_insert->next = head;
+			head = node_to_insert;
 			return;
 		}
 		//Traversa la lista
@@ -178,4 +193,30 @@ public:
 	bool isEmpty() {
 		return size == 0;
 	}
+#pragma region Sort
+	Node^ partition(Node^ low, Node^ high, ordenar_por orden, forma_ordenar forma) {
+		cancion^ pivot = high->val_cancion;
+		Node^ i = low->prev;
+		for (Node^ j = low; j != high; j = j->next) {
+			if (pivot->comparar(j->val_cancion, orden, forma)) {
+				if (i) i = i->next;
+				else i = low;
+				i->val_cancion->swap(j->val_cancion);
+			}
+		}
+		if (i) i = i->next;
+		else i = low;
+		i->val_cancion->swap(high->val_cancion);
+		return i;
+	}
+
+	void quickSort(Node^ low, Node^ high, ordenar_por orden, forma_ordenar forma) {
+		if (high != nullptr && low != high && low != high->next) {
+			Node^ pivot = partition(low, high, orden, forma);
+			quickSort(low, pivot->prev, orden, forma);
+			quickSort(pivot->next, high, orden, forma);
+		}
+	}
+#pragma endregion
+
 };

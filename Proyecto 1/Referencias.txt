@@ -1,3 +1,8 @@
 https://stackoverflow.com/questions/612097/how-can-i-get-the-list-of-files-in-a-directory-using-c-or-c/37494654#37494654
 https://www.techiedelight.com/extract-n-characters-from-the-end-of-a-string-in-cpp/
 https://stackoverflow.com/questions/6444842/efficient-way-to-check-if-stdstring-has-only-spaces
+https://stackoverflow.com/questions/10063770/how-to-add-a-new-row-to-datagridview-programmatically
+https://stackoverflow.com/questions/3578144/index-of-currently-selected-row-in-datagridview
+https://stackoverflow.com/questions/4849987/how-do-i-remove-the-empty-row-from-the-bottom-of-a-datagridview-control
+https://stackoverflow.com/questions/946813/c-cli-converting-from-systemstring-to-stdstring
+https://stackoverflow.com/questions/52157687/change-background-image-of-button-programmatically-in-visual-c
