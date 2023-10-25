@@ -1,5 +1,5 @@
 #pragma once
-#include "Lista.h"
+#include "Cola.h"
 #include <fstream>
 #include <sstream>
 #include <string>
@@ -33,6 +33,11 @@ Lista^ Leer_dirrección(std::string dir) {
             path_string.substr(path_string.find_last_of('\\') + 1)
             + " no es de extensión .txt\n";
     }
+    if (direcciones.empty()) {
+        System::String^ msg = gcnew System::String("Folder sin ningún archivo .txt");
+        System::Windows::Forms::MessageBox::Show(msg, "Vació");
+        return nullptr;
+    }
     //Se repite hasta haber leído todos los archivos .txt
     while (!direcciones.empty()) {
         //Abre el archivo .txt
@@ -61,7 +66,7 @@ Lista^ Leer_dirrección(std::string dir) {
         msg = gcnew System::String(errores.c_str());
     }
     else msg = gcnew System::String("Archivo abierto exitosamente");
-    System::Windows::Forms::MessageBox::Show(msg);
+    System::Windows::Forms::MessageBox::Show(msg, "Lectura del folder");
     return cds;
 }
 
@@ -96,6 +101,7 @@ Lista^ leer_canciones(std::ifstream& cd_abierto, std::map<std::string,
 
             getline(input, temp);
             if (temp.size() > 2 || temp.empty()) throw 0;
+            if(atoi(temp.c_str()) >= 60) throw 1;
             duración_segundos += atoi(temp.c_str());
 
             linea = "";
@@ -115,9 +121,16 @@ Lista^ leer_canciones(std::ifstream& cd_abierto, std::map<std::string,
 
             canciones->Add(system_nombre, system_artista, system_cd, duración_segundos);
         }
-        catch (...) {
-            errores += "Error: Formato de linea incorrecta en la linea #" + std::to_string(index_linea) +
-                " del cd " + cd + '\n';
+        catch (int err) {
+            switch (err) {
+                case 0:
+                    errores += "Error: Formato de linea incorrecta en la linea #" + std::to_string(index_linea) +
+                        " del cd " + cd + '\n';
+                    break;
+                case 1:
+                    errores += "Error: Formato de la duración incorrecto en la linea #" + std::to_string(index_linea) +
+                        " del cd " + cd + " (hay más de 59 segundos)\n";
+            }
         }
     }
     return canciones;
