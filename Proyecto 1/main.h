@@ -431,12 +431,22 @@ namespace Proyecto1 {
 
 		}
 #pragma endregion
+#pragma region variables
 
+		//Lista que contiene los cds cargados
 		Lista^ listado_de_cds = nullptr;
+		//Guarda el nombre del cd
 		System::String^ cd_seleccionado = nullptr;
+		//Cola de reproducción
 		Cola^ lista_reproducción = gcnew Cola();
+		//Indica si hay alguna canción reproduciendose
 		bool reproduciendo = false;
+		//Indica de que forma se quiere ordenar la cola de reproducción
 		forma_ordenar forma = ascendente;
+#pragma endregion
+
+#pragma region Metodos y funciones
+
 
 		void actualizar_datos() {
 			dgv_cd->AllowUserToAddRows = false;
@@ -478,7 +488,7 @@ namespace Proyecto1 {
 			pl_cancion->Location = btn_menu->Location;
 			pl_cancion->Visible = true;
 		}
-
+		//Añade a la cola de reproducción la canción seleccionada
 		void añadir_a_cola(int row_index) {
 			if (row_index == -1) return;
 			System::String^ nombre = dgv_cancion->Rows[row_index]->Cells[0]->Value->ToString();
@@ -494,9 +504,11 @@ namespace Proyecto1 {
 			System::Windows::Forms::MessageBox::Show("Canción agregada a la lista de reproducción",
 				"Agregar canción");
 		}
-		
+		//Muestra en pantalla la canción a reproducir, mostrando los datos de
+		//Artista, nombre de la canción, cd y la duración de la canción
 		void actualizar_reproducción() {
 			cancion^ canción_a_reproducir = lista_reproducción->front()->val_cancion;
+			reproduciendo = true;
 
 			int minutos = canción_a_reproducir->obtener_duracion_segundos() / 60;
 			int segundos = canción_a_reproducir->obtener_duracion_segundos() % 60;
@@ -513,11 +525,104 @@ namespace Proyecto1 {
 			btn_reproducir->BackgroundImage = Image::FromFile(
 				IO::Path::Combine(Environment::CurrentDirectory, "imagenes", "Stop.png"));
 		}
+#pragma endregion
+
+#pragma region  botones
+
+		//Carga el folder indicado
+		private: System::Void btn_cargar_Click(System::Object^ sender, System::EventArgs^ e) {
+			//Oculta los paneles que están siendo mostrados
+			pl_cancion->Visible = false;
+			pl_cds->Visible = false;
+			pl_reproducción->Visible = false;
+			
+			//Crea un FolderBrowserDialog y obtiene la dirección del folder seleccionado
+			System::Windows::Forms::FolderBrowserDialog^ folderBrowserDialog1 = gcnew System::Windows::Forms::FolderBrowserDialog;
+
+			System::Windows::Forms::DialogResult result = folderBrowserDialog1->ShowDialog();
+
+			//Vacía el listado de cds previamente cargados
+			if (listado_de_cds) {
+				listado_de_cds = nullptr;
+			}
+			//Se ejecuta si se ha seleccionado algún folder
+			if (result == System::Windows::Forms::DialogResult::OK) {
+				msclr::interop::marshal_context context;
+				//Lee todos los archivos dentro del folder, guardando los correctos a una lista
+				listado_de_cds = Leer_dirrección(context.marshal_as<std::string>(folderBrowserDialog1->SelectedPath));
+				//Actualiza los datos de para mostrar los cds cargados
+				actualizar_datos();
+				//Cambia el estado de reproducción a falso(no se está reproduciendo)
+				reproduciendo = false;
+				lbl_reproducir->Text = "";
+				btn_reproducir->BackgroundImage = Image::FromFile(
+					IO::Path::Combine(Environment::CurrentDirectory, "imagenes", "Play.png"));
+				//Limpia la cola de reproducción
+				lb_reproducción->Items->Clear();
+				lista_reproducción = gcnew Cola();
+			}
+		}
+		//Muestra el panel que despliegua la información de los cds cargados
 		private: System::Void menu_Click(System::Object^ sender, System::EventArgs^ e) {
 			pl_cds->Location = btn_menu->Location;
 			pl_cds->Visible = true;
 			pl_reproducción->Visible = false;
 		}
+		//Muestra el panel con la lista de las canciones del cd seleccionado
+		private: System::Void dgv_cd_CellDoubleClick(System::Object^ sender, System::Windows::Forms::DataGridViewCellEventArgs^ e) {
+			if(listado_de_cds)abrir_cd(e->RowIndex);
+		}
+		//Cierra el panel de la lista de los cds
+		private: System::Void btn_cds_cerrar_Click(System::Object^ sender, System::EventArgs^ e) {
+			pl_cds->Visible = false;
+		}
+		//Añade la canción elegida a la cola de reproducción
+		private: System::Void dgv_cancion_CellDoubleClick(System::Object^ sender, System::Windows::Forms::DataGridViewCellEventArgs^ e) {
+			añadir_a_cola(e->RowIndex);
+		}
+		//Cierra el panel que contiene la lista de canciones cargadas 
+		private: System::Void btn_cancion_cerrar_Click(System::Object^ sender, System::EventArgs^ e) {
+			pl_cancion->Visible = false;
+		}
+		//Enseña el panel de la cola de reproducción
+		private: System::Void btn_reproducción_Click(System::Object^ sender, System::EventArgs^ e) {
+			pl_reproducción->Location = btn_reproducción->Location;
+			pl_reproducción->Visible = true;
+			pl_cancion->Visible = false;
+			pl_cds->Visible = false;
+			lista_reproducción->mostrar_cola(lb_reproducción);
+		}
+		//Indica que la cola de reproducción se ordenara de forma ascendente
+		private: System::Void rB_ascendente_Click(System::Object^ sender, System::EventArgs^ e) {
+			forma = ascendente;
+		}
+		//Indica que la cola de reproducción se ordenara de forma descendente
+		private: System::Void rB_descendente_Click(System::Object^ sender, System::EventArgs^ e) {
+			forma = descendente;
+		}
+		//Ordena la cola de reproducción a traves del nombre de la canción
+		private: System::Void btn_ordenar_nombre_Click(System::Object^ sender, System::EventArgs^ e) {
+			lista_reproducción->sort(ordenar_por::nombre, forma);
+			lista_reproducción->mostrar_cola(lb_reproducción);
+			if(reproduciendo)actualizar_reproducción();
+		}
+		//Ordena la cola de reproducción a traves del artista
+		private: System::Void btn_ordenar_artista_Click(System::Object^ sender, System::EventArgs^ e) {
+			lista_reproducción->sort(ordenar_por::artista, forma);
+			lista_reproducción->mostrar_cola(lb_reproducción);
+			if(reproduciendo)actualizar_reproducción();
+		}
+		//Ordena la cola de reproducción a traves de la duración
+		private: System::Void btn_ordenar_duración_Click(System::Object^ sender, System::EventArgs^ e) {
+			lista_reproducción->sort(ordenar_por::duracion, forma);
+			lista_reproducción->mostrar_cola(lb_reproducción);
+			if(reproduciendo)actualizar_reproducción();
+		}
+		//Esconde el panel de la cola de reproducción
+		private: System::Void btn_reproducción_cerrar_Click(System::Object^ sender, System::EventArgs^ e) {
+			pl_reproducción->Visible = false;
+		}
+		//Muestra la canción a reproducir
 		private: System::Void reproducir_Click(System::Object^ sender, System::EventArgs^ e) {
 			if (lista_reproducción->isEmpty()) {
 				System::Windows::Forms::MessageBox::Show("Lista de reproducción vacía", "Error");
@@ -533,53 +638,13 @@ namespace Proyecto1 {
 			actualizar_reproducción();
 			reproduciendo = true;
 		}
-		//Carga el folder indicado
-		private: System::Void btn_cargar_Click(System::Object^ sender, System::EventArgs^ e) {
-			pl_cancion->Visible = false;
-			pl_cds->Visible = false;
-			
-			System::Windows::Forms::FolderBrowserDialog^ folderBrowserDialog1 = gcnew System::Windows::Forms::FolderBrowserDialog;
-
-			System::Windows::Forms::DialogResult result = folderBrowserDialog1->ShowDialog();
-
-
-			if (listado_de_cds) {
-				listado_de_cds = nullptr;
-			}
-			if (result == System::Windows::Forms::DialogResult::OK) {
-				msclr::interop::marshal_context context;
-				listado_de_cds = Leer_dirrección(context.marshal_as<std::string>(folderBrowserDialog1->SelectedPath));
-				actualizar_datos();
-				reproduciendo = false;
-				lbl_reproducir->Text = "";
-				btn_reproducir->BackgroundImage = Image::FromFile(
-					IO::Path::Combine(Environment::CurrentDirectory, "imagenes", "Play.png"));
-				lb_reproducción->Items->Clear();
-			}
-		}
-		private: System::Void btn_cds_cerrar_Click(System::Object^ sender, System::EventArgs^ e) {
-			pl_cds->Visible = false;
-		}
-		private: System::Void dgv_cd_CellDoubleClick(System::Object^ sender, System::Windows::Forms::DataGridViewCellEventArgs^ e) {
-			abrir_cd(e->RowIndex);
-		}
-		private: System::Void btn_cancion_cerrar_Click(System::Object^ sender, System::EventArgs^ e) {
-			pl_cancion->Visible = false;
-		}
-		private: System::Void dgv_cancion_CellDoubleClick(System::Object^ sender, System::Windows::Forms::DataGridViewCellEventArgs^ e) {
-			añadir_a_cola(e->RowIndex);
-		}
-		private: System::Void btn_reproducción_Click(System::Object^ sender, System::EventArgs^ e) {
-			pl_reproducción->Location = btn_reproducción->Location;
-			pl_reproducción->Visible = true;
-			pl_cancion->Visible = false;
-			pl_cds->Visible = false;
-			lista_reproducción->mostrar_cola(lb_reproducción);
-		}
-		private: System::Void btn_reproducción_cerrar_Click(System::Object^ sender, System::EventArgs^ e) {
-			pl_reproducción->Visible = false;
-		}
+		//Reproduce la siguiente canción en la cola de reproducción y pone la canción anteriormente reproducida
+		//al final de la cola
 		private: System::Void btn_siguiente_Click(System::Object^ sender, System::EventArgs^ e) {
+			if (lista_reproducción->isEmpty()) {
+				System::Windows::Forms::MessageBox::Show("Lista de reproducción vacía", "Error");
+				return;
+			}
 			auto temp = lista_reproducción->front()->val_cancion;
 			lista_reproducción->pop();
 
@@ -592,26 +657,6 @@ namespace Proyecto1 {
 			lista_reproducción->mostrar_cola(lb_reproducción);
 			actualizar_reproducción();
 		}
-		private: System::Void rB_ascendente_Click(System::Object^ sender, System::EventArgs^ e) {
-			forma = ascendente;
-		}
-		private: System::Void rB_descendente_Click(System::Object^ sender, System::EventArgs^ e) {
-			forma = descendente;
-		}
-		private: System::Void btn_ordenar_nombre_Click(System::Object^ sender, System::EventArgs^ e) {
-			lista_reproducción->sort(ordenar_por::nombre, forma);
-			lista_reproducción->mostrar_cola(lb_reproducción);
-			actualizar_reproducción();
-		}
-		private: System::Void btn_ordenar_artista_Click(System::Object^ sender, System::EventArgs^ e) {
-			lista_reproducción->sort(ordenar_por::artista, forma);
-			lista_reproducción->mostrar_cola(lb_reproducción);
-			actualizar_reproducción();
-		}
-		private: System::Void btn_ordenar_duración_Click(System::Object^ sender, System::EventArgs^ e) {
-			lista_reproducción->sort(ordenar_por::duracion, forma);
-			lista_reproducción->mostrar_cola(lb_reproducción);
-			actualizar_reproducción();
-		}
+#pragma endregion
 	};
 }
