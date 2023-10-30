@@ -42,7 +42,7 @@ public:
 	int obtener_duracion_segundos() {
 		return duracion_segundos;
 	}
-
+	//Compara el artista, nombre de la canción o la duración de la canción para ordenar la cola de reproducción
 	bool comparar(cancion^ c, ordenar_por orden, forma_ordenar forma) {
 		msclr::interop::marshal_context context;
 		std::string a;
@@ -69,7 +69,7 @@ public:
 			break;
 		}
 	}
-
+	//Intercambia los datos de los nodos para ordenar la cola de reproducción
 	void swap(cancion^ c) {
 		System::String^ nombre_temp = nombre;
 		System::String^ artista_temp = artista;

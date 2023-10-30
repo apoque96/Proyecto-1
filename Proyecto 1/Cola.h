@@ -24,7 +24,7 @@ public:
 	void sort(ordenar_por orden, forma_ordenar forma) {
 		canciones->quickSort(front(), canciones->get(canciones->Size() - 1), orden, forma);
 	}
-
+	//Despliega todas las canciones junto a su duración, artista, nombre y cd
 	void mostrar_cola(System::Windows::Forms::ListBox^ lb) {
 		lb->Items->Clear();
 		auto current = front();
