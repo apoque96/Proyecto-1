@@ -1,0 +1,6 @@
+Song 1||Artist 1||3:30
+Song 2||Artist 2||4:15
+Song 3||Artist 3||2:45
+Single Song||Solo Artist||5:00
+This is a song with a long title||An artist with a lengthy name||6:30
+Song 4||Artist 4||1:30
