@@ -97,10 +97,22 @@ Lista^ leer_canciones(std::ifstream& cd_abierto, std::map<std::string,
 
             getline(input, temp, ':');
             if (temp.size() > 2 || temp.empty() || temp.find_first_not_of(' ') == std::string::npos) throw 0;
+            //Revisa que el formato de la duración está correcto
+            {
+                int i;
+                std::stringstream ss(temp);
+                if ((ss >> i).fail() || !(ss >> std::ws).eof()) throw 2;
+            }
             duración_segundos = atoi(temp.c_str()) * 60;
 
             getline(input, temp);
             if (temp.size() > 2 || temp.empty()) throw 0;
+            //Revisa que el formato de la duración está correcto
+            {
+                int i;
+                std::stringstream ss(temp);
+                if ((ss >> i).fail() || !(ss >> std::ws).eof()) throw 2;
+            }
             if(atoi(temp.c_str()) >= 60) throw 1;
             duración_segundos += atoi(temp.c_str());
 
@@ -130,6 +142,10 @@ Lista^ leer_canciones(std::ifstream& cd_abierto, std::map<std::string,
                 case 1:
                     errores += "Error: Formato de la duración incorrecto en la linea #" + std::to_string(index_linea) +
                         " del cd " + cd + " (hay más de 59 segundos)\n";
+                    break;
+                case 2:
+                    errores += "Error: Formato de la duración incorrecto en la linea #" + std::to_string(index_linea) +
+                        " del cd " + cd + " (solo se acepta el siguiente formato: min:seg)\n";
             }
         }
     }

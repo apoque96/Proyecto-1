@@ -6,3 +6,4 @@ https://stackoverflow.com/questions/3578144/index-of-currently-selected-row-in-d
 https://stackoverflow.com/questions/4849987/how-do-i-remove-the-empty-row-from-the-bottom-of-a-datagridview-control
 https://stackoverflow.com/questions/946813/c-cli-converting-from-systemstring-to-stdstring
 https://stackoverflow.com/questions/52157687/change-background-image-of-button-programmatically-in-visual-c
+https://stackoverflow.com/questions/1243428/convert-string-to-int-with-bool-fail-in-c

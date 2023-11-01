@@ -127,11 +127,16 @@ namespace Proyecto1 {
 			this->btn_siguiente = (gcnew System::Windows::Forms::Button());
 			this->btn_cargar = (gcnew System::Windows::Forms::Button());
 			this->pl_cds = (gcnew System::Windows::Forms::Panel());
+			this->lbl_instrucción = (gcnew System::Windows::Forms::Label());
 			this->btn_cds_cerrar = (gcnew System::Windows::Forms::Button());
 			this->dgv_cd = (gcnew System::Windows::Forms::DataGridView());
+			this->Cd = (gcnew System::Windows::Forms::DataGridViewTextBoxColumn());
 			this->pl_cancion = (gcnew System::Windows::Forms::Panel());
 			this->btn_cancion_cerrar = (gcnew System::Windows::Forms::Button());
 			this->dgv_cancion = (gcnew System::Windows::Forms::DataGridView());
+			this->Nombre = (gcnew System::Windows::Forms::DataGridViewTextBoxColumn());
+			this->Artista = (gcnew System::Windows::Forms::DataGridViewTextBoxColumn());
+			this->Duración = (gcnew System::Windows::Forms::DataGridViewTextBoxColumn());
 			this->lb_reproducción = (gcnew System::Windows::Forms::ListBox());
 			this->btn_reproducción = (gcnew System::Windows::Forms::Button());
 			this->lbl_Ordenar = (gcnew System::Windows::Forms::Label());
@@ -143,11 +148,6 @@ namespace Proyecto1 {
 			this->btn_ordenar_duración = (gcnew System::Windows::Forms::Button());
 			this->btn_ordenar_artista = (gcnew System::Windows::Forms::Button());
 			this->lbl_reproducir = (gcnew System::Windows::Forms::Label());
-			this->Nombre = (gcnew System::Windows::Forms::DataGridViewTextBoxColumn());
-			this->Artista = (gcnew System::Windows::Forms::DataGridViewTextBoxColumn());
-			this->Duración = (gcnew System::Windows::Forms::DataGridViewTextBoxColumn());
-			this->Cd = (gcnew System::Windows::Forms::DataGridViewTextBoxColumn());
-			this->lbl_instrucción = (gcnew System::Windows::Forms::Label());
 			this->pl_cds->SuspendLayout();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->dgv_cd))->BeginInit();
 			this->pl_cancion->SuspendLayout();
@@ -218,6 +218,15 @@ namespace Proyecto1 {
 			this->pl_cds->TabIndex = 5;
 			this->pl_cds->Visible = false;
 			// 
+			// lbl_instrucción
+			// 
+			this->lbl_instrucción->AutoSize = true;
+			this->lbl_instrucción->Location = System::Drawing::Point(4, 6);
+			this->lbl_instrucción->Name = L"lbl_instrucción";
+			this->lbl_instrucción->Size = System::Drawing::Size(168, 13);
+			this->lbl_instrucción->TabIndex = 2;
+			this->lbl_instrucción->Text = L"Haga doble click para seleccionar";
+			// 
 			// btn_cds_cerrar
 			// 
 			this->btn_cds_cerrar->Location = System::Drawing::Point(0, 181);
@@ -238,6 +247,14 @@ namespace Proyecto1 {
 			this->dgv_cd->Size = System::Drawing::Size(255, 150);
 			this->dgv_cd->TabIndex = 0;
 			this->dgv_cd->CellDoubleClick += gcnew System::Windows::Forms::DataGridViewCellEventHandler(this, &main::dgv_cd_CellDoubleClick);
+			// 
+			// Cd
+			// 
+			this->Cd->AutoSizeMode = System::Windows::Forms::DataGridViewAutoSizeColumnMode::Fill;
+			this->Cd->HeaderText = L"Cd";
+			this->Cd->MinimumWidth = 212;
+			this->Cd->Name = L"Cd";
+			this->Cd->ReadOnly = true;
 			// 
 			// pl_cancion
 			// 
@@ -273,6 +290,30 @@ namespace Proyecto1 {
 			this->dgv_cancion->Size = System::Drawing::Size(386, 214);
 			this->dgv_cancion->TabIndex = 0;
 			this->dgv_cancion->CellDoubleClick += gcnew System::Windows::Forms::DataGridViewCellEventHandler(this, &main::dgv_cancion_CellDoubleClick);
+			// 
+			// Nombre
+			// 
+			this->Nombre->AutoSizeMode = System::Windows::Forms::DataGridViewAutoSizeColumnMode::AllCells;
+			this->Nombre->HeaderText = L"Nombre";
+			this->Nombre->MinimumWidth = 120;
+			this->Nombre->Name = L"Nombre";
+			this->Nombre->ReadOnly = true;
+			this->Nombre->Width = 120;
+			// 
+			// Artista
+			// 
+			this->Artista->AutoSizeMode = System::Windows::Forms::DataGridViewAutoSizeColumnMode::AllCells;
+			this->Artista->HeaderText = L"Artista";
+			this->Artista->MinimumWidth = 120;
+			this->Artista->Name = L"Artista";
+			this->Artista->ReadOnly = true;
+			this->Artista->Width = 120;
+			// 
+			// Duración
+			// 
+			this->Duración->HeaderText = L"Duración";
+			this->Duración->Name = L"Duración";
+			this->Duración->ReadOnly = true;
 			// 
 			// lb_reproducción
 			// 
@@ -391,47 +432,6 @@ namespace Proyecto1 {
 			this->lbl_reproducir->Size = System::Drawing::Size(0, 13);
 			this->lbl_reproducir->TabIndex = 8;
 			// 
-			// Nombre
-			// 
-			this->Nombre->AutoSizeMode = System::Windows::Forms::DataGridViewAutoSizeColumnMode::AllCells;
-			this->Nombre->HeaderText = L"Nombre";
-			this->Nombre->MinimumWidth = 120;
-			this->Nombre->Name = L"Nombre";
-			this->Nombre->ReadOnly = true;
-			this->Nombre->Width = 120;
-			// 
-			// Artista
-			// 
-			this->Artista->AutoSizeMode = System::Windows::Forms::DataGridViewAutoSizeColumnMode::AllCells;
-			this->Artista->HeaderText = L"Artista";
-			this->Artista->MinimumWidth = 120;
-			this->Artista->Name = L"Artista";
-			this->Artista->ReadOnly = true;
-			this->Artista->Width = 120;
-			// 
-			// Duración
-			// 
-			this->Duración->HeaderText = L"Duración";
-			this->Duración->Name = L"Duración";
-			this->Duración->ReadOnly = true;
-			// 
-			// Cd
-			// 
-			this->Cd->AutoSizeMode = System::Windows::Forms::DataGridViewAutoSizeColumnMode::Fill;
-			this->Cd->HeaderText = L"Cd";
-			this->Cd->MinimumWidth = 212;
-			this->Cd->Name = L"Cd";
-			this->Cd->ReadOnly = true;
-			// 
-			// lbl_instrucción
-			// 
-			this->lbl_instrucción->AutoSize = true;
-			this->lbl_instrucción->Location = System::Drawing::Point(4, 6);
-			this->lbl_instrucción->Name = L"lbl_instrucción";
-			this->lbl_instrucción->Size = System::Drawing::Size(168, 13);
-			this->lbl_instrucción->TabIndex = 2;
-			this->lbl_instrucción->Text = L"Haga doble click para seleccionar";
-			// 
 			// main
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
@@ -447,8 +447,9 @@ namespace Proyecto1 {
 			this->Controls->Add(this->btn_siguiente);
 			this->Controls->Add(this->btn_reproducir);
 			this->Controls->Add(this->lbl_reproducir);
+			this->Icon = (cli::safe_cast<System::Drawing::Icon^>(resources->GetObject(L"$this.Icon")));
 			this->Name = L"main";
-			this->Text = L"main";
+			this->Text = L"Musica";
 			this->pl_cds->ResumeLayout(false);
 			this->pl_cds->PerformLayout();
 			(cli::safe_cast<System::ComponentModel::ISupportInitialize^>(this->dgv_cd))->EndInit();

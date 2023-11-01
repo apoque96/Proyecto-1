@@ -1,0 +1,7 @@
+My Song||Artist 1||3:30
+Another Song||Artist 2||4:15
+My Song||Artist 1
+||4:00
+My Song||Artist 2||3:60
+This is a very long song name with many words||This is an extremely long artist name with lots of words||4:00
+Como te voy a olvidar||Los Angeles Azules||4:30
